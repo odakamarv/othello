@@ -14,7 +14,7 @@ namespace GameObjectController
 
         public void SetColor(Color color)
         {
-            this.text.color = color;
+            text.color = color;
         }
 
         public void SetTextWithColor(string text, Color color)
