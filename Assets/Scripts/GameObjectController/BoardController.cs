@@ -1,22 +1,17 @@
 ﻿using UnityEngine;
 using BoardStruct;
+using System.Linq;
 
 namespace GameObjectController
 {
     public class BoardController : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject tiles;
-        [SerializeField]
-        private GameObject tile;
-        [SerializeField]
-        private GameObject stones;
-        [SerializeField]
-        private GameObject stone;
-        [SerializeField]
-        private Material tileMaterialNormal;
-        [SerializeField]
-        private Material tileMaterialValid;
+        [SerializeField] readonly private GameObject tiles;
+        [SerializeField] readonly private GameObject tile;
+        [SerializeField] readonly private GameObject stones;
+        [SerializeField] readonly private GameObject stone;
+        [SerializeField] readonly private Material tileMaterialNormal;
+        [SerializeField] readonly private Material tileMaterialValid;
 
         private BoardInfo boardInfo;
 
@@ -31,7 +26,7 @@ namespace GameObjectController
             boardInfo = new BoardInfo();
         }
 
-        public void setTile(int col, int row)
+        public void SetTile(int col, int row)
         {
             var setX = IncreaseX * row + OffsetX;
             var setZ = IncreaseZ * col + OffsetZ;
@@ -43,7 +38,7 @@ namespace GameObjectController
             tile.name = "Tile" + col + row;
         }
 
-        public void setStone(int col, int row, BoardValues value)
+        public void SetStone(int col, int row, BoardValues value)
         {
             var setX = IncreaseX * row + OffsetX;
             var setZ = IncreaseZ * col + OffsetZ;
@@ -54,17 +49,10 @@ namespace GameObjectController
             stone.transform.position = new Vector3(setX, 0f, setZ);
             stone.name = "Stone" + col + row;
 
-            if (value == BoardValues.Black)
-            {
-                stone.GetComponentInChildren<Animator>().SetTrigger("setBlack");
-            }
-            else
-            {
-                stone.GetComponentInChildren<Animator>().SetTrigger("setWhite");
-            }
+            stone.GetComponentInChildren<Animator>().SetTrigger(value == BoardValues.Black ? "setBlack" : "setWhite");
         }
 
-        public void turnStone(int col, int row)
+        public void TurnStone(int col, int row)
         {
             var stone = stones.transform.FindChild("Stone" + col + row);
             stone.GetComponentInChildren<Animator>().SetTrigger("doTurn");
@@ -74,16 +62,14 @@ namespace GameObjectController
         {
             foreach (Transform child in stones.transform)
             {
-                GameObject.Destroy(child.gameObject);
+                GameObject.Destroy(child);
             }
             stones.transform.DetachChildren();
         }
 
         public void SetAllTileNormalColor()
         {
-            foreach (BoardPoint point in boardInfo.AllBoardPoint)
-            {
-                var targetTile = tiles.transform.FindChild("Tile" + point.col + point.row);
+            foreach (var targetTile in boardInfo.AllBoardPoint.Select(point => tiles.transform.FindChild("Tile" + point.col + point.row))){
                 targetTile.GetComponent<Renderer>().material = tileMaterialNormal;
             }
         }
