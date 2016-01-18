@@ -1,30 +1,31 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using BaseController;
 
 namespace GameObjectController
 {
-    public class LogBoardController : MonoBehaviour
+    public class LogBoardController : BaseLogBoardController
     {
-        [SerializeField] private GameObject content;
-        [SerializeField] private Text logBoardOneLine;
+        private ConstValues constValues = new ConstValues();
+        private GetPlayerConstValues getPlayerConstValues = new GetPlayerConstValues();
 
-        public void AddLine(string text, Color color)
+        public void AddPutLog(GameState gameState, int col, int row)
         {
-            var addTo = content.transform;
-            var addLine = Instantiate(logBoardOneLine);
+            var turnPlayerColorString = getPlayerConstValues.GetTurnPlayerColorString(gameState);
+            var turnPlayerTextColor   = getPlayerConstValues.GetTurnPlayerTextColor(gameState);
 
-            addLine.text = text;
-            addLine.color = color;
-            addLine.GetComponent<RectTransform>().SetParent(addTo, false);
+            var logText = Utilities.ReplaceTextWithColorString(constValues.TextFormatPutLog, turnPlayerColorString);
+            logText = string.Format(logText, col, row);
+
+            AddLine(logText, turnPlayerTextColor);
         }
 
-        public void RemoveLastLine()
+        public void AddPathLog(GameState gameState)
         {
-            var removeFrom = content.transform;
-            var removeLine = removeFrom.GetChild(removeFrom.childCount - 1);
+            var turnPlayerColorString = getPlayerConstValues.GetTurnPlayerColorString(gameState);
+            var turnPlayerTextColor   = getPlayerConstValues.GetTurnPlayerTextColor(gameState);
 
-            removeLine.gameObject.GetComponent<RectTransform>().SetParent(null);
-            Destroy(removeLine.gameObject);
+            var logText = Utilities.ReplaceTextWithColorString(constValues.TextFormatPathLog, turnPlayerColorString);
+
+            AddLine(logText, turnPlayerTextColor);
         }
     }
 }
