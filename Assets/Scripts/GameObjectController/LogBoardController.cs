@@ -11,7 +11,7 @@ namespace GameObjectController
         public void AddLine(string text, Color color)
         {
             var addTo = content.transform;
-            var addLine = GameObject.Instantiate(logBoardOneLine);
+            var addLine = Instantiate(logBoardOneLine);
 
             addLine.text = text;
             addLine.color = color;
@@ -24,7 +24,7 @@ namespace GameObjectController
             var removeLine = removeFrom.GetChild(removeFrom.childCount - 1);
 
             removeLine.gameObject.GetComponent<RectTransform>().SetParent(null);
-            GameObject.Destroy(removeLine.gameObject);
+            Destroy(removeLine.gameObject);
         }
     }
 }
