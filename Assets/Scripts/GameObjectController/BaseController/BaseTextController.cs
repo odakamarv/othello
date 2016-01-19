@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace BaseController
+namespace GameObjectController.BaseController
 {
     public class TextController : MonoBehaviour
     {
