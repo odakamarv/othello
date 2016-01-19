@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
 using BoardStruct;
+using System.Collections.Generic;
 
-namespace BaseController
+namespace GameObjectController.BaseController
 {
     public class BaseBoardController : MonoBehaviour
     {
         [SerializeField] private GameObject tiles;
         [SerializeField] private GameObject tile;
         [SerializeField] private GameObject stones;
-        [SerializeField] private GameObject stone;
+        [SerializeField] private StoneController stone;
+
+        private Dictionary<string, StoneController> stoneDictionary = new Dictionary<string, StoneController>();
+        private Dictionary<string, GameObject> tileDictionary = new Dictionary<string, GameObject>();
+        private Dictionary<GameObject, BoardPoint> tilePointDictionary = new Dictionary<GameObject, BoardPoint>();
 
         // 座標情報
         private const float OffsetX = -35f;
@@ -25,7 +30,8 @@ namespace BaseController
 
             tile.GetComponent<Transform>().SetParent(tiles.transform);
             tile.transform.position = new Vector3(setX, 0.0f, setZ);
-            tile.name = "Tile" + col + row;
+            tileDictionary["Tile" + col + row] = tile;
+            tilePointDictionary[tile] = new BoardPoint(col, row);
         }
 
         public void SetStone(int col, int row, BoardValues value)
@@ -37,22 +43,22 @@ namespace BaseController
 
             stone.GetComponent<Transform>().SetParent(stones.transform);
             stone.transform.position = new Vector3(setX, 0f, setZ);
-            stone.name = "Stone" + col + row;
+            stoneDictionary["Stone" + col + row] = stone;
 
             if (value == BoardValues.Black)
             {
-                stone.GetComponentInChildren<Animator>().SetTrigger("setBlack");
+                stone.setBlack();
             }
             else
             {
-                stone.GetComponentInChildren<Animator>().SetTrigger("setWhite");
+                stone.setWhite();
             }
         }
 
         public void TurnStone(int col, int row)
         {
-            var stone = stones.transform.FindChild("Stone" + col + row);
-            stone.GetComponentInChildren<Animator>().SetTrigger("doTurn");
+            var stone = stoneDictionary["Stone" + col + row];
+            stone.Turn();
         }
 
         public void RemoveAllStones()
@@ -66,17 +72,13 @@ namespace BaseController
 
         public void SetColorToTile(int col, int row, Material material)
         {
-            var targetTile = tiles.transform.FindChild("Tile" + col + row);
+            var targetTile = tileDictionary["Tile" + col + row];
             targetTile.GetComponent<Renderer>().material = material;
         }
 
-        public BoardPoint getPointOfTile(GameObject tile)
+        public BoardPoint GetPointOfTile(GameObject tile)
         {
-            // nameから座標を取得 （例: Tile04 → Point(0, 4)）
-            var col = int.Parse(tile.name.Substring(tile.name.Length - 2, 1));
-            var row = int.Parse(tile.name.Substring(tile.name.Length - 1, 1));
-
-            return new BoardPoint(col, row);
+            return tilePointDictionary[tile];
         }
     }
 }
