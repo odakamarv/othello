@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ConstValues{
+public class ConstValuesForTextFormat {
     public readonly string StringBlack = "黒";
     public readonly string StringWhite = "白";
 
@@ -14,6 +14,4 @@ public class ConstValues{
     public readonly Color TextColorBlack = Color.black;
     public readonly Color TextColorWhite = Color.white;
     public readonly Color TextColorOther = Color.gray;
-
-    public readonly float AnimationWaitTime = 0.55f;
 }
