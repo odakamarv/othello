@@ -1,6 +1,6 @@
 ﻿namespace GameObjectController.BaseController.Interface
 {
-    public interface ButtonInterface
+    public interface IButtonInterface
     {
         void PrintClickLog();
     }
