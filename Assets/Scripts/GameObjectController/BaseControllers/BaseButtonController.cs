@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using GameObjectController.BaseController.Interface;
 
-namespace BaseController
+namespace GameObjectController.BaseController
 {
-    public class ButtonController : MonoBehaviour
+    abstract class ButtonController : MonoBehaviour, ButtonInterface
     {
         [SerializeField] private Button button;
 
@@ -16,5 +17,7 @@ namespace BaseController
         {
             button.interactable = false;
         }
+
+        public abstract void PrintClickLog();
     }
 }
