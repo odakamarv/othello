@@ -4,7 +4,7 @@ using GameObjectController.BaseController.Interface;
 
 namespace GameObjectController.BaseController
 {
-    abstract class ButtonController : MonoBehaviour, ButtonInterface
+    abstract class ButtonController : MonoBehaviour, IButtonInterface
     {
         [SerializeField] private Button button;
 
